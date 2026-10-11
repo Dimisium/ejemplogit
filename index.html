@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Web</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="cabecera">
+    <a href="#inicio" class="logo">Mi Web</a>
+    <nav>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button id="tema" class="boton-tema" aria-label="Cambiar tema">🌙</button>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <h1>Hola, bienvenido a mi web</h1>
+      <p>Una página sencilla hecha con HTML, CSS y un poco de JavaScript.</p>
+      <a href="#contacto" class="boton">Escríbeme</a>
+    </section>
+
+    <section id="sobre-mi">
+      <h2>Sobre mí</h2>
+      <p>
+        Aquí puedes contar quién eres, a qué te dedicas y qué te gusta hacer.
+        Cambia este texto por el tuyo.
+      </p>
+    </section>
+
+    <section id="servicios">
+      <h2>Servicios</h2>
+      <div class="tarjetas">
+        <article class="tarjeta">
+          <h3>Diseño</h3>
+          <p>Interfaces limpias y fáciles de usar.</p>
+        </article>
+        <article class="tarjeta">
+          <h3>Desarrollo</h3>
+          <p>Webs rápidas que funcionan en cualquier dispositivo.</p>
+        </article>
+        <article class="tarjeta">
+          <h3>Soporte</h3>
+          <p>Ayuda y mantenimiento cuando lo necesites.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <h2>Contacto</h2>
+      <form id="formulario" class="formulario">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mensaje">Mensaje</label>
+        <textarea id="mensaje" name="mensaje" rows="4" required></textarea>
+
+        <button type="submit" class="boton">Enviar</button>
+        <p id="aviso" class="aviso" role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="pie">
+    <p>&copy; <span id="anio"></span> Mi Web. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
