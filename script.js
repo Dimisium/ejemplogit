@@ -29,6 +29,25 @@ botonTema.addEventListener("click", () => {
 
 document.getElementById("anio").textContent = new Date().getFullYear();
 
+const animables = document.querySelectorAll("section:not(.hero) > h2, section:not(.hero) > p, .tarjeta, .formulario");
+const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if ("IntersectionObserver" in window && !sinMovimiento) {
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada) => {
+      if (entrada.isIntersecting) {
+        entrada.target.classList.add("visible");
+        observador.unobserve(entrada.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  animables.forEach((elemento) => {
+    elemento.classList.add("revelar");
+    observador.observe(elemento);
+  });
+}
+
 const formulario = document.getElementById("formulario");
 const aviso = document.getElementById("aviso");
 

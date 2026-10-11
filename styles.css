@@ -6,6 +6,9 @@
   --borde: #e2e2de;
   --acento: #2f6feb;
   --acento-texto: #ffffff;
+  --degradado: linear-gradient(120deg, #2f6feb, #8b5cf6 55%, #ec4899);
+  --sombra: 0 10px 30px rgba(31, 35, 40, 0.08);
+  --brillo: rgba(139, 92, 246, 0.25);
 }
 
 :root[data-tema="oscuro"] {
@@ -16,6 +19,9 @@
   --borde: #30353b;
   --acento: #6c9cff;
   --acento-texto: #10131a;
+  --degradado: linear-gradient(120deg, #6c9cff, #a78bfa 55%, #f472b6);
+  --sombra: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --brillo: rgba(167, 139, 250, 0.3);
 }
 
 * {
@@ -32,23 +38,40 @@ body {
   line-height: 1.6;
   color: var(--texto);
   background: var(--fondo);
+  overflow-x: clip;
+  transition: background 0.3s, color 0.3s;
+}
+
+::selection {
+  background: var(--brillo);
 }
 
 .cabecera {
   position: sticky;
   top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   gap: 1.5rem;
   padding: 0.9rem 1.5rem;
-  background: var(--superficie);
+  background: color-mix(in srgb, var(--superficie) 78%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--borde);
 }
 
+.logo,
+.resaltado {
+  background: var(--degradado);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .logo {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--texto);
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
@@ -59,21 +82,49 @@ nav {
 }
 
 nav a {
+  position: relative;
+  padding: 0.2rem 0;
   color: var(--texto-suave);
   text-decoration: none;
+  transition: color 0.2s;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--degradado);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
 
 nav a:hover {
-  color: var(--acento);
+  color: var(--texto);
+}
+
+nav a:hover::after {
+  transform: scaleX(1);
 }
 
 .boton-tema {
   border: 1px solid var(--borde);
-  background: transparent;
-  border-radius: 8px;
-  padding: 0.3rem 0.6rem;
+  background: var(--superficie);
+  border-radius: 999px;
+  width: 2.4rem;
+  height: 2.4rem;
   font-size: 1rem;
   cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.2s;
+}
+
+.boton-tema:hover {
+  transform: rotate(20deg) scale(1.08);
+  border-color: var(--acento);
 }
 
 main {
@@ -83,7 +134,7 @@ main {
 }
 
 section {
-  padding: 3.5rem 0;
+  padding: 4rem 0;
   scroll-margin-top: 4rem;
 }
 
@@ -92,19 +143,85 @@ section + section {
 }
 
 .hero {
+  position: relative;
   text-align: center;
-  padding: 6rem 0;
+  padding: 7rem 0;
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero::before {
+  top: 8%;
+  left: 2%;
+  width: 320px;
+  height: 320px;
+  background: #8b5cf6;
+  animation: flotar 12s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  right: 0;
+  bottom: 5%;
+  width: 280px;
+  height: 280px;
+  background: #2f6feb;
+  animation: flotar 14s ease-in-out infinite alternate-reverse;
+}
+
+:root[data-tema="oscuro"] .hero::before,
+:root[data-tema="oscuro"] .hero::after {
+  opacity: 0.3;
+}
+
+.etiqueta {
+  display: inline-block;
+  margin-bottom: 1.2rem;
+  padding: 0.3rem 0.9rem;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--sombra);
 }
 
 h1 {
-  font-size: clamp(2rem, 6vw, 3.2rem);
-  line-height: 1.15;
+  font-size: clamp(2.2rem, 7vw, 3.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
   margin: 0 0 1rem;
 }
 
+.hero p {
+  max-width: 34rem;
+  margin: 0 auto 2rem;
+  font-size: 1.1rem;
+}
+
 h2 {
-  font-size: 1.6rem;
-  margin: 0 0 1rem;
+  font-size: 1.8rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.5rem;
+}
+
+h2::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 4px;
+  margin-top: 0.5rem;
+  border-radius: 4px;
+  background: var(--degradado);
 }
 
 h3 {
@@ -118,32 +235,74 @@ p {
 
 .boton {
   display: inline-block;
-  padding: 0.7rem 1.4rem;
+  padding: 0.75rem 1.6rem;
   border: none;
-  border-radius: 8px;
-  background: var(--acento);
+  border-radius: 999px;
+  background: var(--degradado);
   color: var(--acento-texto);
   font: inherit;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
+  box-shadow: 0 8px 20px var(--brillo);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .boton:hover {
-  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px var(--brillo);
+}
+
+.boton:active {
+  transform: translateY(0);
 }
 
 .tarjetas {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .tarjeta {
-  padding: 1.4rem;
+  position: relative;
+  padding: 1.6rem;
   background: var(--superficie);
   border: 1px solid var(--borde);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.tarjeta::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--degradado);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.tarjeta:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--sombra);
+  border-color: transparent;
+}
+
+.tarjeta:hover::before {
+  transform: scaleX(1);
+}
+
+.icono {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1rem;
   border-radius: 12px;
+  background: var(--brillo);
+  font-size: 1.4rem;
 }
 
 .tarjeta p {
@@ -154,7 +313,12 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-width: 480px;
+  max-width: 520px;
+  padding: 1.8rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  box-shadow: var(--sombra);
 }
 
 .formulario label {
@@ -162,20 +326,26 @@ p {
   margin-top: 0.5rem;
 }
 
+.formulario label:first-child {
+  margin-top: 0;
+}
+
 .formulario input,
 .formulario textarea {
-  padding: 0.6rem 0.8rem;
+  padding: 0.7rem 0.9rem;
   border: 1px solid var(--borde);
-  border-radius: 8px;
-  background: var(--superficie);
+  border-radius: 10px;
+  background: var(--fondo);
   color: var(--texto);
   font: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .formulario input:focus,
 .formulario textarea:focus {
-  outline: 2px solid var(--acento);
-  outline-offset: 1px;
+  outline: none;
+  border-color: var(--acento);
+  box-shadow: 0 0 0 4px var(--brillo);
 }
 
 .formulario .boton {
@@ -187,17 +357,85 @@ p {
   min-height: 1.6rem;
   margin: 0.5rem 0 0;
   color: var(--acento);
+  font-weight: 600;
 }
 
 .pie {
+  position: relative;
   padding: 2rem 1.5rem;
   text-align: center;
-  border-top: 1px solid var(--borde);
+}
+
+.pie::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--degradado);
+  opacity: 0.6;
 }
 
 .pie p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes flotar {
+  to {
+    transform: translate(40px, 30px) scale(1.15);
+  }
+}
+
+.hero > * {
+  animation: aparecer 0.7s ease backwards;
+}
+
+.hero > :nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.hero > :nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.hero > :nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.revelar:not(.visible) {
+  opacity: 0;
+}
+
+.revelar.visible {
+  animation: aparecer 0.6s ease backwards;
+}
+
+.tarjeta.visible:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.tarjeta.visible:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
 @media (max-width: 600px) {
@@ -215,5 +453,15 @@ p {
 
   .boton-tema {
     margin-left: auto;
+  }
+
+  .hero {
+    padding: 4.5rem 0;
+  }
+
+  .hero::before,
+  .hero::after {
+    width: 200px;
+    height: 200px;
   }
 }
